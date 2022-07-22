@@ -3,4 +3,4 @@ seaborn
 joblib
 requests
 statistics
-sklearn.ensemble
+sklearn
