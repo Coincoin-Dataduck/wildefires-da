@@ -47,7 +47,7 @@ if selected == "Étude « Powerlines »":
     st.markdown('L\'étude de la fréquence des feux par cause révèle une anomalies particulière à partir de l\'année '
                 '2011 : une hausse des feu liés aux lignes haute-tension sans précédant')
 
-    tab1, tab2 = st.tabs(["📈 Chart", "🗃 Data"])
+    tab2, tab1 = st.tabs(["📈 Chart", "🧮 Data"])
     df_powerline = pd.read_csv('Powerline_db.csv', index_col = 'OBJECTID')
 
     tab1.subheader('**Classement des années en fonction du nombre de feu**')
@@ -60,7 +60,7 @@ if selected == "Étude « Powerlines »":
     plt.axhline(y=df_powerline['FIRE_YEAR'].value_counts().mean(),color='blue',label='Moyenne');
     plt.xlabel("Année")
     plt.ylabel('Feux par an')
-    tab2.subheader("Nombre de feux par an du aux lignes électrique aux EUA", fontsize=15)
+    tab2.subheader("Nombre de feux par an du aux lignes électrique aux EUA")
     plt.legend();
     tab2.pyplot(fig)
 
