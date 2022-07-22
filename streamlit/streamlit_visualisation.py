@@ -198,7 +198,7 @@ if selected == "Et la sécheresse ?":
     st.markdown('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nisi nulla, volutpat sed euismod quis, hendrerit a odio. Integer dignissim volutpat ullamcorper. Integer commodo sapien finibus lacus tempus, sit amet consequat justo mollis. Quisque quis velit erat. In placerat scelerisque felis a laoreet. Curabitur sed justo ac lectus commodo scelerisque. Praesent ut nisi lectus. Vestibulum mollis varius ex sit amet placerat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam erat volutpat.')
 
 if selected == "Prédiction de feu":
-    model_clf = joblib.load('model_CA.pkl')
+    model_clf = joblib.load('alaska_model.pkl')
 
     st.markdown("## Prédiction de feu en Alaska à partir de la Météo du jour ")
     tab1, tab2 = st.tabs(["👀 Essayer le model", "🛠️ Info de construction"])
