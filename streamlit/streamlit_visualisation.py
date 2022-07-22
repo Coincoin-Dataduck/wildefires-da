@@ -4,6 +4,9 @@ import streamlit as st
 from streamlit_option_menu import option_menu # Nécessaire pour afficher correctement la sidebar
 import seaborn as sns
 import matplotlib.pyplot as plt
+import joblib
+import requests
+import statistics
 
 sns.set_theme(palette='gist_heat_r') #fire theme :eyes:
 
@@ -195,10 +198,44 @@ if selected == "Et la sécheresse ?":
     st.markdown('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nisi nulla, volutpat sed euismod quis, hendrerit a odio. Integer dignissim volutpat ullamcorper. Integer commodo sapien finibus lacus tempus, sit amet consequat justo mollis. Quisque quis velit erat. In placerat scelerisque felis a laoreet. Curabitur sed justo ac lectus commodo scelerisque. Praesent ut nisi lectus. Vestibulum mollis varius ex sit amet placerat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam erat volutpat.')
 
 if selected == "Prédiction de feu":
-    st.markdown("### Prédiction de feu")
-    st.markdown('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nisi nulla, volutpat sed euismod quis, hendrerit a odio. Integer dignissim volutpat ullamcorper. Integer commodo sapien finibus lacus tempus, sit amet consequat justo mollis. Quisque quis velit erat. In placerat scelerisque felis a laoreet. Curabitur sed justo ac lectus commodo scelerisque. Praesent ut nisi lectus. Vestibulum mollis varius ex sit amet placerat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam erat volutpat.')
+    model_clf = joblib.load('model_CA.pkl')
+
+    st.markdown("## Prédiction de feu en Alaska à partir de la Météo du jour ")
+    tab1, tab2 = st.tabs(["👀 Essayer le model", "🛠️ Info de construction"])
+
+    with tab1:
+        st.header('Test du modèle')
+        st.markdown('## Prédiction actuelles')
+        response = requests.request("GET", 'http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/346836?apikey=H7SbkuzPeNt2SAzWnDyQQ9ZSEbFUoe13&details=True&metrics=True')
+        weather_data=pd.DataFrame([[statistics.mean([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]),
+                                    statistics.mean([response.json()[hour]['DewPoint']['Value'] for hour in range(0,11)]),
+                                    statistics.mean([response.json()[hour]['Wind']['Speed']['Value'] for hour in range(0,11)]),
+                                    statistics.mean([response.json()[hour]['WindGust']['Speed']['Value'] for hour in range(0,11)]),
+                                    max([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]),
+                                    min([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]),
+                                    statistics.mean([response.json()[hour]['TotalLiquid']['Value'] for hour in range(0,11)])]],
+                                  columns=['TEMP', 'DEWP', 'WDSP', 'GUST', 'MAX', 'MIN', 'PRCP'])
+        prediction = model_clf.predict(weather_data)
+
+        pas_feu, feu = st.columns(2)
+        pas_feu.metric("Probabilité d'avoir aucun feu", "🌳", prediction[0][0])
+        feu.metric("Probabilité d'avoir un feu", "🔥", prediction[0][1])
+
+        temp, dwpt, wind, gust, max, min, precip = st.columns(7)
+        temp.metric('Temperature', statistics.mean([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]))
+        max.metric('Temperature max', max([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]))
+        min.metric('Temperature min', min([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]))
+        dwpt.metric('Point de rosé', statistics.mean([response.json()[hour]['DewPoint']['Value'] for hour in range(0,11)]))
+        wind.metric('Vitesse du vent',statistics.mean([response.json()[hour]['Wind']['Speed']['Value'] for hour in range(0,11)]))
+        gust.metric('Rafales de vent', statistics.mean([response.json()[hour]['WindGust']['Speed']['Value'] for hour in range(0,11)]))
+        precip.metric('Hygrometrie',statistics.mean([response.json()[hour]['TotalLiquid']['Value'] for hour in range(0,11)]))
+
+        st.markdown('## Testez vos propres données')
+
+    with tab2:
+        st.markdown('Construction')
 
 if selected == "Conclusion":
     st.markdown("### Conclusion")
     st.markdown('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nisi nulla, volutpat sed euismod quis, hendrerit a odio. Integer dignissim volutpat ullamcorper. Integer commodo sapien finibus lacus tempus, sit amet consequat justo mollis. Quisque quis velit erat. In placerat scelerisque felis a laoreet. Curabitur sed justo ac lectus commodo scelerisque. Praesent ut nisi lectus. Vestibulum mollis varius ex sit amet placerat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam erat volutpat.')
-        
+

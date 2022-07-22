@@ -1,2 +1,5 @@
 streamlit_option_menu
 seaborn
+joblib
+requests
+statistics
