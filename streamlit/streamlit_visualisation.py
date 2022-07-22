@@ -223,17 +223,18 @@ if selected == "Prédiction de feu":
         
 
         pas_feu, feu = st.columns(2)
-        pas_feu.metric("Probabilité d'avoir aucun feu", "🌳", round(prediction[0][0], 2))
-        feu.metric("Probabilité d'avoir un feu", "🔥", round(prediction[0][1], 2))
-
+        pas_feu.metric("Probabilité d'avoir aucun feu", round(prediction[0][0], 2), "🌳", delta_color='off')
+        feu.metric("Probabilité d'avoir un feu", round(prediction[0][1], 2), "🔥", delta_color='off')
+        
+        st.markdown('Cette prédiction est donnée par rapport au prédiction météo actuelle pour la journée de demain par accuweather pour l\'Alaska')
         temp, dwpt, wind, gust, maxi, mini, precip = st.columns(7)
-        temp.metric('Temperature', statistics.mean([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]))
-        maxi.metric('Temperature max', max([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]))
-        mini.metric('Temperature min', min([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]))
-        dwpt.metric('Point de rosé', statistics.mean([response.json()[hour]['DewPoint']['Value'] for hour in range(0,11)]))
-        wind.metric('Vitesse du vent',statistics.mean([response.json()[hour]['Wind']['Speed']['Value'] for hour in range(0,11)]))
-        gust.metric('Rafales de vent', statistics.mean([response.json()[hour]['WindGust']['Speed']['Value'] for hour in range(0,11)]))
-        precip.metric('Hygrometrie',statistics.mean([response.json()[hour]['TotalLiquid']['Value'] for hour in range(0,11)]))
+        temp.metric('Temperature °C', round((statistics.mean([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]-32)*1.8), 2))
+        maxi.metric('Temperature max °C', round((max([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]-32)*1.8), 2))
+        mini.metric('Temperature min °C', round((min([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]-32)*1.8), 2))
+        dwpt.metric('Point de rosé °C', round((statistics.mean([response.json()[hour]['DewPoint']['Value'] for hour in range(0,11)]-32)*1.8), 2))
+        wind.metric('Vitesse du vent km/h',round(statistics.mean([response.json()[hour]['Wind']['Speed']['Value'] for hour in range(0,11)]), 2))
+        gust.metric('Rafales de vent km/h', round(statistics.mean([response.json()[hour]['WindGust']['Speed']['Value'] for hour in range(0,11)]), 2))
+        precip.metric('Hygrometrie',round(statistics.mean([response.json()[hour]['TotalLiquid']['Value'] for hour in range(0,11)]), 2))
 
         st.markdown('#### Testez vos propres données')
 
