@@ -231,7 +231,7 @@ if selected == "Prédiction de feu":
         temp.metric('Temperature (°C)', round((statistics.mean([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)])-32)/1.8, 2))
         maxi.metric('Temperature max (°C)', round((max([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)])-32)/1.8, 2))
         mini.metric('Temperature min (°C)', round((min([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)])-32)/1.8, 2))
-        dwpt.metric('Point de rosé (°C)', round(statistics.mean([response.json()[hour]['DewPoint']['Value'] for hour in range(0,11)]-32)/1.8, 2))
+        dwpt.metric('Point de rosé (°C)', round((statistics.mean([response.json()[hour]['DewPoint']['Value'] for hour in range(0,11)])-32)/1.8, 2))
         wind.metric('Vitesse du vent (km/h)',round(statistics.mean([response.json()[hour]['Wind']['Speed']['Value'] for hour in range(0,11)]), 2))
         gust.metric('Rafales de vent (km/h)', round(statistics.mean([response.json()[hour]['WindGust']['Speed']['Value'] for hour in range(0,11)]), 2))
         precip.metric('Précipitations (mm)',round(statistics.mean([response.json()[hour]['TotalLiquid']['Value'] for hour in range(0,11)]), 2))
