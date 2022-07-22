@@ -165,7 +165,7 @@ if selected == "Étude « Powerlines »":
         sns.barplot(x='x_label', y='Value', hue='anomaly symbol', data=df_drougth, ax=ax);
         plt.xticks(rotation=45)
         plt.xlabel("Année")
-        plt.ylabel('Index de sévérité de Palmer. 0 = Normal)
+        plt.ylabel('Index de sévérité de Palmer. 0 = Normal')
         plt.title("Évolution de l'index de sévérité de Palmer", fontsize=20)
         ax.legend_.remove();
         st.pyplot(fig)
