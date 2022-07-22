@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import joblib
 import requests
 import statistics
-import sklearn.ensemble
+from sklearn.ensemble import HistGradientBoostingClassifier
 
 sns.set_theme(palette='gist_heat_r') #fire theme :eyes:
 
