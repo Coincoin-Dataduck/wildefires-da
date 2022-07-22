@@ -217,7 +217,9 @@ if selected == "Prédiction de feu":
                                     min([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]),
                                     statistics.mean([response.json()[hour]['TotalLiquid']['Value'] for hour in range(0,11)])]],
                                   columns=['TEMP', 'DEWP', 'WDSP', 'GUST', 'MAX', 'MIN', 'PRCP'])
-        prediction = model_clf.predict(weather_data)
+        
+        prediction = model_clf.predict_proba(weather_data)
+        
 
         pas_feu, feu = st.columns(2)
         pas_feu.metric("Probabilité d'avoir aucun feu", "🌳", prediction[0][0])
