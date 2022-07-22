@@ -4,3 +4,4 @@ joblib
 requests
 statistics
 sklearn
+scikit-learn
