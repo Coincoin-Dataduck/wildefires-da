@@ -9,6 +9,7 @@ import requests
 import statistics
 from sklearn import ensemble
 from sklearn.ensemble import HistGradientBoostingClassifier
+import math
 
 sns.set_theme(palette='gist_heat_r') #fire theme :eyes:
 
@@ -207,7 +208,7 @@ if selected == "Prédiction de feu":
 
     with tab1:
         st.header('Test du modèle')
-        st.markdown('## Prédiction actuelles')
+        st.markdown('#### Prédiction actuelles')
         response = requests.request("GET", 'http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/346836?apikey=H7SbkuzPeNt2SAzWnDyQQ9ZSEbFUoe13&details=True&metrics=True')
         weather_data=pd.DataFrame([[statistics.mean([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]),
                                     statistics.mean([response.json()[hour]['DewPoint']['Value'] for hour in range(0,11)]),
@@ -222,19 +223,19 @@ if selected == "Prédiction de feu":
         
 
         pas_feu, feu = st.columns(2)
-        pas_feu.metric("Probabilité d'avoir aucun feu", "🌳", prediction[0][0])
-        feu.metric("Probabilité d'avoir un feu", "🔥", prediction[0][1])
+        pas_feu.metric("Probabilité d'avoir aucun feu", "🌳", round(prediction[0][0], 2))
+        feu.metric("Probabilité d'avoir un feu", "🔥", round(prediction[0][1], 2))
 
-        temp, dwpt, wind, gust, max, min, precip = st.columns(7)
+        temp, dwpt, wind, gust, maxi, mini, precip = st.columns(7)
         temp.metric('Temperature', statistics.mean([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]))
-        max.metric('Temperature max', max([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]))
-        min.metric('Temperature min', min([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]))
+        maxi.metric('Temperature max', max([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]))
+        mini.metric('Temperature min', min([response.json()[hour]['Temperature']['Value'] for hour in range(0,11)]))
         dwpt.metric('Point de rosé', statistics.mean([response.json()[hour]['DewPoint']['Value'] for hour in range(0,11)]))
         wind.metric('Vitesse du vent',statistics.mean([response.json()[hour]['Wind']['Speed']['Value'] for hour in range(0,11)]))
         gust.metric('Rafales de vent', statistics.mean([response.json()[hour]['WindGust']['Speed']['Value'] for hour in range(0,11)]))
         precip.metric('Hygrometrie',statistics.mean([response.json()[hour]['TotalLiquid']['Value'] for hour in range(0,11)]))
 
-        st.markdown('## Testez vos propres données')
+        st.markdown('#### Testez vos propres données')
 
     with tab2:
         st.markdown('Construction')
