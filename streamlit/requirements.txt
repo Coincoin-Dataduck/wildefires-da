@@ -1,0 +1,5 @@
+streamlit_option_menu
+seaborn
+joblib
+requests
+scikit-learn==1.0.2
