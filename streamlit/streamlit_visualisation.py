@@ -12,7 +12,7 @@ from PIL import Image
 from os import environ
 
 #get the api key
-api_token = os.environ['OPENWEATHER_API_KEY']
+api_token = os.getenv('OPENWEATHER_API_KEY')
 
 sns.set_theme(palette='gist_heat_r')  # fire theme :eyes:
 
@@ -264,8 +264,8 @@ if selected == "Prédiction de feu":
         feu.metric("Probabilité d'avoir un feu", f'{round(prediction[0][1]*100, 2)} % ±15', "🔥", delta_color='off')
 
         # Displaying the source data
-        st.markdown('Cette prédiction est donnée par rapport au prédiction météo actuelle pour la journée de demain par'
-                    ' accuweather pour l\'Alaska')
+        st.markdown('Cette prédiction est donnée par rapport au prédictions météo actuelles pour la journée de demain '
+                    'par openweather pour l\'Alaska')
         temperature = round(((response.json()['daily'][0]['temp']['day']) -32) / 1.8, 2)
         temperature_max = round(((response.json()['daily'][0]['temp']['max']) - 32) / 1.8, 2)
         temperature_min = round(((response.json()['daily'][0]['temp']['min']) - 32) / 1.8, 2)
@@ -293,7 +293,7 @@ if selected == "Prédiction de feu":
         with col2:
             wind_speed_s = st.slider('Vitesse du vent (km/h)', value=wind_speed, min_value=0.0, max_value=100.0, step=1.0)*0.62137119223738
             gust_speed_s = st.slider('Vitesse des rafales (km/h)', value=gust_speed, min_value=wind_speed, max_value=100.0, step=1.0)*0.62137119223738
-            precipitation_s = st.slider('Précipitation (mm)', value=precipitation, min_value=0.0, max_value=100.0, step=1.0)*0.039370078740158
+            precipitation_s = st.slider('Précipitation (mm)', value=float(precipitation), min_value=0.0, max_value=100.0, step=1.0)*0.039370078740158
 
         weather_data_s = pd.DataFrame([[temperature_s,
                                       dew_point_s,
